@@ -42,8 +42,6 @@ import java.util.Set;
          if (response.getStatusCode().is2xxSuccessful()) {
              JsonNode responseBody = response.getBody();
              return Optional.ofNullable(responseBody);
-             // Parse the JSON response and extract the required information
-             // ...
          } else {
              System.out.println("Request failed with code: " + response.getStatusCode());
              return Optional.empty();

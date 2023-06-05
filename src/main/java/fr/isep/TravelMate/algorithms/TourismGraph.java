@@ -199,7 +199,9 @@ public class TourismGraph {
         graph.generateAllEdges(coordinates);
 
         // Find the shortest path between two attractions
-        List<String> shortestPath = graph.findShortestPath("Palace of Versailles", "Arc de Triomphe");
+        List<String> shortestPath = graph.findShortestPath("Eiffel Tower", "Montmartre" +
+                "" +
+                "");
 
         // Print the shortest path
         if (shortestPath.isEmpty()) {
