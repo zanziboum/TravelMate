@@ -1,24 +1,20 @@
 package fr.isep.TravelMate.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.algorithms.TourismAttraction;
 import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.service.TourismService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/tourism")
 public class TourismController {
     private final TourismService tourismService;
-
-    @Autowired
-    public TourismController(TourismService tourismService) {
-        this.tourismService = tourismService;
-    }
 
     @GetMapping("/attractions")
     public List<TourismAttraction> getTourismAttractions() {
@@ -26,11 +22,14 @@ public class TourismController {
         return null;
     }
 
-    @GetMapping("/closest-attractions")
-    public List<TourismAttraction> getClosestAttractions(City city) {
-        TourismAttraction sourceAttraction = new TourismAttraction(city.getLatitude(), city.getLongitude());
-        sourceAttraction.setLatitude(city.getLatitude());
-        sourceAttraction.setLongitude(city.getLongitude());
-        return tourismService.findClosestAttraction(sourceAttraction);
+    @PostMapping("/closest-attractions")
+    public JsonNode getClosestAttractions(@RequestBody String cityName) {
+        City city = City.valueOf(cityName);
+        //TourismAttraction sourceAttraction = new TourismAttraction(city.getLatitude(), city.getLongitude());
+        //sourceAttraction.setLatitude(city.getLatitude());
+        //sourceAttraction.setLongitude(city.getLongitude());
+
+        Optional<JsonNode> dest = tourismService.findClosestAttraction(city);
+        return dest.orElse(null);
     }
 }

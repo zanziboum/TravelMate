@@ -1,28 +1,34 @@
 package fr.isep.TravelMate.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+ import org.springframework.beans.factory.annotation.Value;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.client.RestTemplate;
 
-@Service
-public class OpenTripMapService {
-    @Value(value = "${api-key}")
-    private String apiKey;
+import java.util.Locale;
+import java.util.Optional;
 
-    public void getNearbyAttractions(double latitude, double longitude, int radius) {
-        String apiUrl = String.format("https://api.opentripmap.com/0.1/en/places/radius?radius=%d&lon=%f&lat=%f&format=json&apikey=%s",
-                radius, longitude, latitude, apiKey);
+ @Service
+ public class OpenTripMapService {
+     //@Value(value = "${api-key}")
+     private static final String apiKey = "5ae2e3f221c38a28845f05b63a2d5c94a9a2733e6841db3e6c20d838";
 
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JsonNode> response = restTemplate.getForEntity(apiUrl, JsonNode.class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            JsonNode responseBody = response.getBody();
-            // Parse the JSON response and extract the required information
-            // ...
-        } else {
-            System.out.println("Request failed with code: " + response.getStatusCode());
-        }
-    }
-}
+     public Optional<JsonNode> getNearbyAttractions(double latitude, double longitude, int radius) {
+
+         String apiUrl = String.format(Locale.ENGLISH,"https://api.opentripmap.com/0.1/en/places/radius?radius=%d&lon=%f&lat=%f&format=json&apikey=%s",
+                 radius, longitude, latitude, apiKey);
+
+         RestTemplate restTemplate = new RestTemplate();
+         ResponseEntity<JsonNode> response = restTemplate.getForEntity(apiUrl, JsonNode.class);
+         if (response.getStatusCode().is2xxSuccessful()) {
+             JsonNode responseBody = response.getBody();
+             return Optional.ofNullable(responseBody);
+             // Parse the JSON response and extract the required information
+             // ...
+         } else {
+             System.out.println("Request failed with code: " + response.getStatusCode());
+             return Optional.empty();
+         }
+     }
+ }
