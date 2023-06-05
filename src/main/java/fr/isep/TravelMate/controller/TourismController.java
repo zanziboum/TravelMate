@@ -1,8 +1,10 @@
 package fr.isep.TravelMate.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import fr.isep.TravelMate.Entity.TouristAttractionEntity;
 import fr.isep.TravelMate.algorithms.TourismAttraction;
 import fr.isep.TravelMate.model.City;
+import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.service.TourismService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequestMapping("/tourism")
 public class TourismController {
     private final TourismService tourismService;
+    private final AttractionsRepository attractionsRepository;
 
     @GetMapping("/attractions")
     public List<TourismAttraction> getTourismAttractions() {
@@ -32,5 +35,7 @@ public class TourismController {
         Optional<JsonNode> dest = tourismService.findClosestAttraction(city);
         return dest.orElse(null);
     }
+
+
 
 }

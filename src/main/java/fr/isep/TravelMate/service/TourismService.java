@@ -2,6 +2,7 @@ package fr.isep.TravelMate.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.model.City;
+import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.repository.CityRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TourismService {
     private final OpenTripMapService openTripMapService;
+    private final AttractionsRepository attractionsRepository;
 
 
     public Optional<JsonNode> findClosestAttraction(City city) {
@@ -30,6 +32,8 @@ public class TourismService {
 
     @PostConstruct
     public void addAttractions(){
+        if (attractionsRepository.count() > 0)return;
+
         boolean success = true;
         for (City city : City.values()){
              success = success && openTripMapService.addAttractionsFromCity(city);

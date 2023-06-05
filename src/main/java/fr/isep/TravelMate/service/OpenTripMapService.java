@@ -1,9 +1,11 @@
 package fr.isep.TravelMate.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import fr.isep.TravelMate.Entity.AttractionKindEntity;
 import fr.isep.TravelMate.Entity.CityEntity;
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
 import fr.isep.TravelMate.model.City;
+import fr.isep.TravelMate.repository.AttractionKindRepository;
 import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.repository.CityRepository;
 import jakarta.annotation.PostConstruct;
@@ -13,10 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
  import org.springframework.stereotype.Service;
  import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
- @Service
+@Service
  @RequiredArgsConstructor
  public class OpenTripMapService {
 
@@ -24,6 +28,7 @@ import java.util.Optional;
 
      private final AttractionsRepository attractionsRepository;
      private final CityRepository cityRepository;
+     private final AttractionKindRepository kindRepository;
 
      //private static final String apiKey = "5ae2e3f221c38a28845f05b63a2d5c94a9a2733e6841db3e6c20d838";
 
@@ -54,18 +59,35 @@ import java.util.Optional;
          Optional<JsonNode> attractionsOptional = this.getNearbyAttractions(city.getLatitude(), city.getLongitude(), 5000);
          if (attractionsOptional.isEmpty()) return false;
          JsonNode attractions = attractionsOptional.get();
+
          try {
              attractions.forEach(attraction -> {
                  String name = attraction.get("name").asText();
                  double lon = attraction.get("point").get("lon").asDouble();
                  double lat = attraction.get("point").get("lat").asDouble();
-                 if (attractionsRepository.findByName(name).isEmpty()){
+                 int score = attraction.get("rate").asInt();
 
-                     TouristAttractionEntity touristAttraction = new TouristAttractionEntity(name,lon,lat,cityEntity);
+                 String kinds = attraction.get("kinds").asText();
+                 String[] kindsArray = kinds.split(",");
+                 Set<AttractionKindEntity> kindEntitySet = new HashSet<>();
+
+                 for (String kindName : kindsArray){
+                     String finalKindName = kindName.trim();
+                     AttractionKindEntity attractionKind = kindRepository.findByName(finalKindName)
+                             .orElseGet(() -> {
+                         AttractionKindEntity newAttractionKind = new AttractionKindEntity();
+                         newAttractionKind.setName(finalKindName);
+                         return kindRepository.save(newAttractionKind);
+                     });
+                     kindEntitySet.add(attractionKind);
+                 }
+                 if (attractionsRepository.findByName(name).isEmpty()){
+                     TouristAttractionEntity touristAttraction = new TouristAttractionEntity(name,lon,lat,score,cityEntity,kindEntitySet);
                      attractionsRepository.save(touristAttraction);
                  }
              });
          }catch (Exception e){
+             System.out.println(e);
              return false;
          }
          return true;
