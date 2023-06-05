@@ -1,27 +1,31 @@
 package fr.isep.TravelMate.controller;
 
-import fr.isep.TravelMate.service.OpenTripMapService;
+import fr.isep.TravelMate.algorithms.TourismAttraction;
+import fr.isep.TravelMate.service.TourismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tourism")
 public class TourismController {
-    private final OpenTripMapService openTripMapService;
+    private final TourismService tourismService;
 
     @Autowired
-    public TourismController(OpenTripMapService openTripMapService) {
-        this.openTripMapService = openTripMapService;
+    public TourismController(TourismService tourismService) {
+        this.tourismService = tourismService;
     }
 
-    @GetMapping("/attractions")
-    public void getNearbyAttractions() {
-        double latitude = 40.7128;
-        double longitude = -74.0060;
-        int radius = 5000;
+    @GetMapping("/closest-attractions")
+    public List<TourismAttraction> getClosestAttractions() {
+        double sourceLatitude = 40.7128;
+        double sourceLongitude = -74.0060;
 
-        openTripMapService.getNearbyAttractions(latitude, longitude, radius);
+        TourismAttraction sourceAttraction = new TourismAttraction("Source", sourceLatitude, sourceLongitude);
+
+        return tourismService.findClosestAttraction(sourceAttraction);
     }
 }
