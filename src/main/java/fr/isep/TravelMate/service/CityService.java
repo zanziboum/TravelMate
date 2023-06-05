@@ -20,8 +20,10 @@ public class CityService {
 
     @PostConstruct
     public void init() {
-        List<CityEntity> cityEntities = fromEnum();
-        cityRepository.saveAll(cityEntities);
+        if (cityRepository.count() == 0){
+            List<CityEntity> cityEntities = fromEnum();
+            cityRepository.saveAll(cityEntities);
+        }
     }
     public static List<CityEntity> fromEnum() {
         List<CityEntity> cityEntities = new ArrayList<>();

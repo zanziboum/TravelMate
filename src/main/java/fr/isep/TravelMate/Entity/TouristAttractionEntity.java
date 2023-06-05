@@ -25,4 +25,14 @@ public class TouristAttractionEntity {
     @JoinColumn(name = "city_id")
     private CityEntity city;
 
+    public TouristAttractionEntity(String name, double lon, double lat, CityEntity city) {
+        this.name = name;
+        this.lon = lon;
+        this.lat = lat;
+        this.city = city;
+    }
+
+    public TouristAttractionEntity() {
+
+    }
 }

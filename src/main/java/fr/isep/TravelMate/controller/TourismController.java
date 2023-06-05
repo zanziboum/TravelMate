@@ -32,4 +32,5 @@ public class TourismController {
         Optional<JsonNode> dest = tourismService.findClosestAttraction(city);
         return dest.orElse(null);
     }
+
 }
