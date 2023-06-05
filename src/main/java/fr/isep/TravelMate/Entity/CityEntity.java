@@ -22,17 +22,7 @@ public class CityEntity {
     private double lon;
     private double lat;
 
-    public static List<CityEntity> fromEnum() {
-        List<CityEntity> cityEntities = new ArrayList<>();
-        for (City city : City.values()) {
-            CityEntity cityEntity = new CityEntity();
-            cityEntity.setName(city.name());
-            cityEntity.setLon(city.getLongitude());
-            cityEntity.setLat(city.getLatitude());
-            cityEntities.add(cityEntity);
-        }
-        return cityEntities;
-    }
+
     @OneToMany(mappedBy = "city")
     private List<TouristAttractionEntity> attractions;
 }
