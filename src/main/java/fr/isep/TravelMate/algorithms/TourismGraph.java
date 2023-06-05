@@ -4,21 +4,7 @@ import java.util.*;
 
 public class TourismGraph {
 
-    private Map<String, List<Edge>> graph;
-
-    public TourismGraph() {
-        this.graph = new HashMap<>();
-    }
-
-    public void addAttraction(String attractionName) {
-        graph.put(attractionName, new ArrayList<>());
-    }
-
-    public void addEdge(String sourceAttraction, String destinationAttraction, double distance) {
-        List<Edge> edges = graph.getOrDefault(sourceAttraction, new ArrayList<>());
-        edges.add(new Edge(destinationAttraction, distance));
-        graph.put(sourceAttraction, edges);
-    }
+    private Map<String, List<Edge>> graph = new HashMap<>();
 
     public List<String> findShortestPath(String sourceAttraction, String destinationAttraction) {
         // Create a priority queue to store the vertices and their distances
@@ -143,6 +129,50 @@ public class TourismGraph {
         return distance;
     }
 
+    public void addEdge(String sourceAttraction, String destinationAttraction, double distance) {
+        List<Edge> edges = graph.getOrDefault(sourceAttraction, new ArrayList<>());
+        edges.add(new Edge(destinationAttraction, distance));
+        graph.put(sourceAttraction, edges);
+    }
+
+    public void addAttraction(String attractionName) {
+        graph.put(attractionName, new ArrayList<>());
+    }
+
+    public void generateAllEdges(double[][] coordinates) {
+        int numAttractions = coordinates.length;
+
+        for (int i = 0; i < numAttractions; i++) {
+            String sourceAttraction = graph.keySet().toArray()[i].toString();
+            double sourceLat = coordinates[i][0];
+            double sourceLon = coordinates[i][1];
+
+            PriorityQueue<Edge> closestEdges = new PriorityQueue<>(Comparator.comparingDouble(Edge::getDistance));
+
+            for (int j = 0; j < numAttractions; j++) {
+                if (i == j) {
+                    continue; // Skip adding edge to itself
+                }
+
+                String destinationAttraction = graph.keySet().toArray()[j].toString();
+                double destLat = coordinates[j][0];
+                double destLon = coordinates[j][1];
+
+                double distance = calculateDistance(sourceLat, sourceLon, destLat, destLon);
+                closestEdges.offer(new Edge(destinationAttraction, distance));
+            }
+
+            int edgeCount = 0;
+            while (!closestEdges.isEmpty() && edgeCount < 3) {
+                Edge closestEdge = closestEdges.poll();
+                String destinationAttraction = closestEdge.getDestination();
+                double distance = closestEdge.getDistance();
+                addEdge(sourceAttraction, destinationAttraction, distance);
+                edgeCount++;
+            }
+        }
+    }
+
     public static void main(String[] args) {
         // Create a new instance of TourismGraph
         TourismGraph graph = new TourismGraph();
@@ -155,14 +185,18 @@ public class TourismGraph {
         graph.addAttraction("Montmartre");
         graph.addAttraction("Palace of Versailles");
 
-        // Add edges between attractions
-        graph.addEdge("Eiffel Tower", "Louvre Museum", calculateDistance(48.8566, 2.3522, 48.8606, 2.3376));
-        graph.addEdge("Eiffel Tower", "Arc de Triomphe", calculateDistance(48.8566, 2.3522, 48.8738, 2.295));
-        graph.addEdge("Eiffel Tower", "Montmartre", calculateDistance(48.8566, 2.3522, 48.8867, 2.3431));
-        graph.addEdge("Louvre Museum", "Notre-Dame Cathedral", calculateDistance(48.8606, 2.3376, 48.8529, 2.3499));
-        graph.addEdge("Arc de Triomphe", "Louvre Museum", calculateDistance(48.8738, 2.295, 48.8606, 2.3376));
-        graph.addEdge("Montmartre", "Palace of Versailles", calculateDistance(48.8867, 2.3431, 48.8048, 2.1204));
-        graph.addEdge("Palace of Versailles", "Eiffel Tower", calculateDistance(48.8048, 2.1204, 48.8566, 2.3522));
+        // Coordinates of attractions
+        double[][] coordinates = {
+                {48.8566, 2.3522}, // Eiffel Tower
+                {48.8606, 2.3376}, // Louvre Museum
+                {48.8529, 2.3499}, // Notre-Dame Cathedral
+                {48.8738, 2.295},  // Arc de Triomphe
+                {48.8867, 2.3431}, // Montmartre
+                {48.8048, 2.1204}  // Palace of Versailles
+        };
+
+        // Generate edges between attractions
+        graph.generateAllEdges(coordinates);
 
         // Find the shortest path between two attractions
         List<String> shortestPath = graph.findShortestPath("Palace of Versailles", "Arc de Triomphe");
