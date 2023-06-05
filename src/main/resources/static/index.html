@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AirTravel</title>
+    <title>Tourist Link</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -15,31 +15,35 @@
     </div>
     <div class="responsive-menu"></div>
 </header>
-<!-- acceuil section -->
 <section id="home">
     <div class="find_trip">
         <h2>Le tourisme en France</h2>
-        <form action="">
-            <div>
-                <label>Pays</label>
-                <input type="text" placeholder="Entrez un Pays">
-            </div>
-            <div>
-                <label>Ville</label>
-                <input type="text" placeholder="Entrez une ville">
-            </div>
-            <div>
-                <label>Région</label>
-                <input type="text" placeholder="Entrez une région">
-            </div>
-            <input type="submit" value="voir">
-        </form>
+                <form>
+                    <div class="form-container">
+                        <p>D'ou partez-vous ?</p>
+                        <div class="dropdown-row">
+                            <select id="depart-ville" class="dropdown">
+                                <option value="" disabled selected>Selectionnez votre ville de depart</option>
+                            </select>
+                            <select id="depart-lieu" class="dropdown">
+                                <option value="" disabled selected>Selectionnez le premier monument que vous voulez visiter</option>
+                            </select>
+                        </div>
+                        <p>Ou voulez-vous aller ?</p>
+                        <div class="dropdown-row">
+                            <select id="arrivee-ville" class="dropdown">
+                                <option value="" disabled selected>Selectionnez votre ville de d'arrivee</option>
+                            </select>
+                            <select id="arrivee-lieu" class="dropdown">
+                                <<option value="" disabled selected>Selectionnez le monument de la fin de votre periple</option>
+                            </select>
+                        </div>
+                        <input type="submit" value="voir" class="submit">
+                    </div>
+                </form>
     </div>
-
 </section>
-
 <section id="popular-destination">
-    <!--        <h1 class="title">destinations populaires</h1>-->
     <div class="content">
         <!-- box -->
         <div class="box">
