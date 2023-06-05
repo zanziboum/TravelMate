@@ -2,9 +2,11 @@ package fr.isep.TravelMate.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.model.City;
+import fr.isep.TravelMate.repository.CityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,5 +27,11 @@ public class TourismService {
         // as shown in the previous code example
 
         return openTripMapService.getNearbyAttractions(latitude, longitude, radius); // Placeholder, replace with actual logic
+    }
+
+    final private CityRepository cityRepository;
+    private void test(){
+
+        cityRepository.findByZip("92500");
     }
 }

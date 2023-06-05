@@ -1,7 +1,9 @@
 package fr.isep.TravelMate.Entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
@@ -18,5 +20,9 @@ public class TouristAttractionEntity {
 
     private double lon;
     private double lat;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private CityEntity city;
 
 }
