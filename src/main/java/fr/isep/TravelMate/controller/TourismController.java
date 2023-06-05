@@ -19,12 +19,20 @@ public class TourismController {
         this.tourismService = tourismService;
     }
 
+    @GetMapping("/attractions")
+    public List<TourismAttraction> getTourismAttractions() {
+        // Replace with your implementation to fetch the list of attractions
+        return null;
+    }
+
     @GetMapping("/closest-attractions")
     public List<TourismAttraction> getClosestAttractions() {
         double sourceLatitude = 40.7128;
         double sourceLongitude = -74.0060;
 
-        TourismAttraction sourceAttraction = new TourismAttraction("Source", sourceLatitude, sourceLongitude);
+        TourismAttraction sourceAttraction = new TourismAttraction();
+        sourceAttraction.setLatitude(sourceLatitude);
+        sourceAttraction.setLongitude(sourceLongitude);
 
         return tourismService.findClosestAttraction(sourceAttraction);
     }
