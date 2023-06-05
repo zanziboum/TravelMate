@@ -1,6 +1,7 @@
 package fr.isep.TravelMate.controller;
 
 import fr.isep.TravelMate.algorithms.TourismAttraction;
+import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.service.TourismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +27,10 @@ public class TourismController {
     }
 
     @GetMapping("/closest-attractions")
-    public List<TourismAttraction> getClosestAttractions() {
-        double sourceLatitude = 40.7128;
-        double sourceLongitude = -74.0060;
-
-        TourismAttraction sourceAttraction = new TourismAttraction();
-        sourceAttraction.setLatitude(sourceLatitude);
-        sourceAttraction.setLongitude(sourceLongitude);
-
+    public List<TourismAttraction> getClosestAttractions(City city) {
+        TourismAttraction sourceAttraction = new TourismAttraction(city.getLatitude(), city.getLongitude());
+        sourceAttraction.setLatitude(city.getLatitude());
+        sourceAttraction.setLongitude(city.getLongitude());
         return tourismService.findClosestAttraction(sourceAttraction);
     }
 }

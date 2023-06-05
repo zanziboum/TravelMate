@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class OpenTripMapService {
-    @Value("${opentripmap.apikey}")
+    @Value(value = "${api-key}")
     private String apiKey;
 
     public void getNearbyAttractions(double latitude, double longitude, int radius) {

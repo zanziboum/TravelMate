@@ -9,7 +9,7 @@ public class TourismAttraction {
         this.latitude = latitude;
     }
 
-    public void setLongitude(double longitude) {
+        public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -19,5 +19,10 @@ public class TourismAttraction {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public TourismAttraction(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
