@@ -81,14 +81,14 @@ function showResult(response,resultsDiv){
         attractionDiv.classList.add('attraction');
 
         // Créez un élément de titre pour le nom de l'attraction
-        const attractionName = document.createElement('h3');
+        const attractionName = document.createElement('h2');
         attractionName.textContent = attraction.name;
         attractionDiv.appendChild(attractionName);
 
         // Créez un élément de paragraphe pour d'autres informations sur l'attraction (score, etc.)
-        const attractionInfo = document.createElement('p');
+        const attractionInfo = document.createElement('h3');
         attractionInfo.textContent = `Ville: ${attraction.city.name} `;
-        const attractionInfo2 = document.createElement('p');
+        const attractionInfo2 = document.createElement('h3');
         attractionInfo2.textContent = `Score: ${attraction.score}`;
         attractionDiv.appendChild(attractionInfo);
         attractionDiv.appendChild(attractionInfo2);

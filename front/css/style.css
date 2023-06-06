@@ -113,8 +113,6 @@ header  .logo a span {
     background-color: #222;
     padding: 20px;
     width: 70%;
-    /*position: absolute;*/
-    /*bottom: -50px;*/
 }
 .find_trip form {
     display: flex;
@@ -314,7 +312,6 @@ header  .logo a span {
     outline: 0;
     border: 1px solid #999;
 }
-
 textarea {
     height: 150px;
     resize: none;
@@ -388,8 +385,13 @@ elenement.style{
     font-size: 20px;
 }
 .result{
+    background-color: #222;
     height: 100%;
     color: white;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 .slider {
     -webkit-appearance: none;
@@ -422,6 +424,15 @@ elenement.style{
     background: #4CAF50;
     cursor: pointer;
 }
+.attraction{
+    border: 3px solid #29d9d5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    width: 70%;
+    padding-left: 10px;
+}
+
 
 /*Responsive*/
 @media (max-width:750px) {
