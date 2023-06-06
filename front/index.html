@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
-    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 </head>
 <body>
 
@@ -25,9 +26,11 @@
                 <form>
                     <div class="form-container">
                         <p>Quel type de batiment voulez-vous vister ?</p>
+                        <div id="selected-options" class="filter-div"></div>
                         <div class="dropdown-row-1">
-                            <select name="filter" id="filter" class="filter" multiple>
+                            <select id="filter" class="filter" multiple="multiple">
                                 <option value="" disabled selected>Selectionnez un filtre</option>
+                                <option>test</option>
                             </select>
                         </div>
                         <p>D'ou partez-vous ?</p>
@@ -54,89 +57,6 @@
     </div>
 </section>
 
-
-<!--<section id="popular-destination">-->
-<!--    <div class="content">-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/paris.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Paris</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/moscou.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Moscou</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/miami.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Miami</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/los-angeles.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Los-Angeles</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/rome.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Rome</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--        <div class="box">-->
-<!--            <img src="images/tokio.jpg" alt="">-->
-<!--            <div class="content">-->
-<!--                <div>-->
-<!--                    <h4>Tokio</h4>-->
-<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
-<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
-<!--                    <a href="#">Lire Plus</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; box &ndash;&gt;-->
-<!--    </div>-->
-<!--</section>-->
 
 <script>
     var toggle_menu = document.querySelector('.responsive-menu');
@@ -230,7 +150,6 @@
         defaultOption.textContent = 'Sélectionnez une option';
         dropdown.appendChild(defaultOption);
     }
-    new MultiSelectTag('filter')  // id
 
     // Récupérer les données des types d'événements depuis l'API
     axios.get(`${apiUrl}/kindName`)
@@ -238,14 +157,14 @@
             const typesEvenements = response.data;
             const filterDropdown = document.getElementById('filter');
 
-            fillDropdownOptions(filterDropdown, typesEvenements);
+            fillDropdownOptions2(filterDropdown, typesEvenements);
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des types d\'événements:', error);
         });
 
     // Fonction utilitaire pour remplir les options d'un dropdown
-    function fillDropdownOptions(dropdown, options) {
+    function fillDropdownOptions2(dropdown, options) {
         options.forEach(option => {
             const optionElement = document.createElement('option');
             optionElement.value = option;
@@ -253,6 +172,27 @@
             dropdown.appendChild(optionElement);
         });
     }
+    $(function() {
+        $("#filter").selectmenu({
+            multiple: true,
+            close: function(event, ui) {
+                var selectedOptions = $(this).val();
+                var selectedOptionsText = '';
+
+                // Construire le texte des options sélectionnées
+                selectedOptions.forEach(function(option) {
+                    selectedOptionsText += option + ', ';
+                });
+
+                // Supprimer la virgule finale
+                selectedOptionsText = selectedOptionsText.slice(0, -2);
+
+                // Afficher le texte des options sélectionnées dans l'élément ajouté
+                $("#selected-options").text(selectedOptionsText);
+            }
+        });
+    });
+
 
 
 </script>
