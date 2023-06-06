@@ -39,7 +39,7 @@ public class TourismController {
     }
 
     @GetMapping("/fromCity")
-    public List<String> getAttractionByCity(@RequestBody String city){
+    public List<String> getAttractionByCity(@RequestParam String city){
         return attractionsRepository.findByCityName(city).stream()
                 .map(TouristAttractionEntity::getName)
                 .collect(Collectors.toList());

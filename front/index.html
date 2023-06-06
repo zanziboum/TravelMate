@@ -152,6 +152,7 @@
 
             // Gérer l'événement de changement de la ville de départ
             departureCityDropdown.addEventListener('change', handleDepartureCityChange);
+            arrivalCityDropdown.addEventListener('change',handleArrivalCityChange);
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des noms de villes:', error);
@@ -162,16 +163,37 @@
         const selectedCity = event.target.value;
         const departureAttractionDropdown = document.getElementById('depart-lieu');
 
-        // Réinitialiser les options du dropdown des attractions de départ
+        // Réinitialiser les options du dropdown des attractions
         resetDropdownOptions(departureAttractionDropdown);
 
         // Vérifier si une ville a été sélectionnée
         if (selectedCity) {
             // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
-            axios.get(`${apiUrl}/AttractionsByCity/${selectedCity}`)
+            axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
                 .then(response => {
                     const attractions = response.data;
                     fillDropdownOptions(departureAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions:', error);
+                });
+        }
+    }
+
+    function handleArrivalCityChange(event) {
+        const selectedCity = event.target.value;
+        const arrivalAttractionDropdown = document.getElementById('arrivee-lieu');
+
+        // Réinitialiser les options du dropdown des attractions
+        resetDropdownOptions(arrivalAttractionDropdown);
+
+        // Vérifier si une ville a été sélectionnée
+        if (selectedCity) {
+            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
+            axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(arrivalAttractionDropdown, attractions);
                 })
                 .catch(error => {
                     console.error('Erreur lors de la récupération des attractions:', error);
@@ -200,7 +222,6 @@
         defaultOption.textContent = 'Sélectionnez une option';
         dropdown.appendChild(defaultOption);
     }
-
 
 </script>
 
