@@ -379,7 +379,7 @@ elenement.style{
     display: none;
 }
 .filter-div    {
-    color: #ec7d7d;
+    color: #4cde54;
     margin-left: 10px;
     margin-bottom: 5px;
     font-size: 20px;
@@ -431,6 +431,14 @@ elenement.style{
     border-radius: 14px;
     width: 70%;
     padding-left: 10px;
+}
+.remove-option{
+    margin-left: 10px;
+    width: 24px;
+    height: 24px;
+}
+.selected-option{
+    align-items: center;
 }
 
 
