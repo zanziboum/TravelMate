@@ -6,7 +6,7 @@ public class TourismGraph {
 
     private Map<String, List<Edge>> graph = new HashMap<>();
 
-    public List<String> findShortestPath(String sourceAttraction, String destinationAttraction) {
+    public List<String> findShortestPath(Map<String, List<Edge>> graph, String sourceAttraction, String destinationAttraction) {
         // Create a priority queue to store the vertices and their distances
         PriorityQueue<Vertex> queue = new PriorityQueue<>();
 
@@ -115,60 +115,37 @@ public class TourismGraph {
         double lat2Rad = Math.toRadians(lat2);
         double lon2Rad = Math.toRadians(lon2);
 
-        // Calculate the differences in latitude and longitude
-        double deltaLat = lat2Rad - lat1Rad;
-        double deltaLon = lon2Rad - lon1Rad;
-
-        // Calculate the Haversine distance
-        double a = Math.pow(Math.sin(deltaLat / 2), 2) +
-                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                        Math.pow(Math.sin(deltaLon / 2), 2);
+        // Haversine formula
+        double dlon = lon2Rad - lon1Rad;
+        double dlat = lat2Rad - lat1Rad;
+        double a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.pow(Math.sin(dlon / 2), 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c;
 
         return distance;
     }
 
-    public void addEdge(String sourceAttraction, String destinationAttraction, double distance) {
-        List<Edge> edges = graph.getOrDefault(sourceAttraction, new ArrayList<>());
-        edges.add(new Edge(destinationAttraction, distance));
-        graph.put(sourceAttraction, edges);
-    }
+    public void generateAllEdges(Map<String, double[]> attractions, int edgeNumberPerNode) {
+        for (String attraction1 : attractions.keySet()) {
+            double[] coordinates1 = attractions.get(attraction1);
+            List<String> nearbyAttractions = new ArrayList<>(attractions.keySet());
+            nearbyAttractions.remove(attraction1);
 
-    public void addAttraction(String attractionName) {
-        graph.put(attractionName, new ArrayList<>());
-    }
+            int edgesGenerated = 0;
+            while (edgesGenerated < edgeNumberPerNode && !nearbyAttractions.isEmpty()) {
+                int randomIndex = (int) (Math.random() * nearbyAttractions.size());
+                String attraction2 = nearbyAttractions.get(randomIndex);
+                double[] coordinates2 = attractions.get(attraction2);
+                double distance = calculateDistance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
+                Edge edge = new Edge(attraction2, distance);
 
-    public void generateAllEdges(double[][] coordinates) {
-        int numAttractions = coordinates.length;
-
-        for (int i = 0; i < numAttractions; i++) {
-            String sourceAttraction = graph.keySet().toArray()[i].toString();
-            double sourceLat = coordinates[i][0];
-            double sourceLon = coordinates[i][1];
-
-            PriorityQueue<Edge> closestEdges = new PriorityQueue<>(Comparator.comparingDouble(Edge::getDistance));
-
-            for (int j = 0; j < numAttractions; j++) {
-                if (i == j) {
-                    continue; // Skip adding edge to itself
+                if (!graph.containsKey(attraction1)) {
+                    graph.put(attraction1, new ArrayList<>());
                 }
+                graph.get(attraction1).add(edge);
 
-                String destinationAttraction = graph.keySet().toArray()[j].toString();
-                double destLat = coordinates[j][0];
-                double destLon = coordinates[j][1];
-
-                double distance = calculateDistance(sourceLat, sourceLon, destLat, destLon);
-                closestEdges.offer(new Edge(destinationAttraction, distance));
-            }
-
-            int edgeCount = 0;
-            while (!closestEdges.isEmpty() && edgeCount < 3) {
-                Edge closestEdge = closestEdges.poll();
-                String destinationAttraction = closestEdge.getDestination();
-                double distance = closestEdge.getDistance();
-                addEdge(sourceAttraction, destinationAttraction, distance);
-                edgeCount++;
+                nearbyAttractions.remove(randomIndex);
+                edgesGenerated++;
             }
         }
     }
@@ -177,31 +154,22 @@ public class TourismGraph {
         // Create a new instance of TourismGraph
         TourismGraph graph = new TourismGraph();
 
-        // Add attractions to the graph
-        graph.addAttraction("Eiffel Tower");
-        graph.addAttraction("Louvre Museum");
-        graph.addAttraction("Notre-Dame Cathedral");
-        graph.addAttraction("Arc de Triomphe");
-        graph.addAttraction("Montmartre");
-        graph.addAttraction("Palace of Versailles");
-
-        // Coordinates of attractions
-        double[][] coordinates = {
-                {48.8566, 2.3522}, // Eiffel Tower
-                {48.8606, 2.3376}, // Louvre Museum
-                {48.8529, 2.3499}, // Notre-Dame Cathedral
-                {48.8738, 2.295},  // Arc de Triomphe
-                {48.8867, 2.3431}, // Montmartre
-                {48.8048, 2.1204}  // Palace of Versailles
-        };
+        // Create a HashMap to store attractions and their coordinates
+        Map<String, double[]> attractions = new HashMap<>();
+        attractions.put("Eiffel Tower", new double[]{48.8566, 2.3522});
+        attractions.put("Louvre Museum", new double[]{48.8606, 2.3376});
+        attractions.put("Notre-Dame Cathedral", new double[]{48.8529, 2.3499});
+        attractions.put("Arc de Triomphe", new double[]{48.8738, 2.295});
+        attractions.put("Montmartre", new double[]{48.8867, 2.3431});
+        attractions.put("Palace of Versailles", new double[]{48.8048, 2.1204});
 
         // Generate edges between attractions
-        graph.generateAllEdges(coordinates);
+        graph.generateAllEdges(attractions,4);
 
         // Find the shortest path between two attractions
-        List<String> shortestPath = graph.findShortestPath("Eiffel Tower", "Montmartre" +
-                "" +
-                "");
+        String sourceAttraction = "Eiffel Tower";
+        String destinationAttraction = "Notre-Dame Cathedral";
+        List<String> shortestPath = graph.findShortestPath(graph.graph, sourceAttraction, destinationAttraction);
 
         // Print the shortest path
         if (shortestPath.isEmpty()) {
