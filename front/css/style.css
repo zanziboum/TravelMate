@@ -380,6 +380,12 @@ iframe {
 elenement.style{
     display: none;
 }
+#selected-options.filter-div    {
+    color: white;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
 /*Responsive*/
 @media (max-width:750px) {
     header .menu {
