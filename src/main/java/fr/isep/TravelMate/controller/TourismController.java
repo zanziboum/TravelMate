@@ -23,6 +23,7 @@ public class TourismController {
     private final AttractionService attractionService;
     private final KindService kindService;
     private final AttractionsRepository attractionsRepository;
+    private final TourismGraphService tourismGraphService;
 
     @PostMapping("/closest-attractions")
     public JsonNode getClosestAttractions(@RequestBody String cityName) {
@@ -67,21 +68,21 @@ public class TourismController {
     }
 
 
-    private final TourismGraphService tourismGraphService;
+    @GetMapping("/")
+    public List<TouristAttractionEntity> getPathWithNoFilter(
+            @RequestParam String start,
+            @RequestParam String end,
+            @RequestParam int nbNode){
+        return tourismGraphService.pathWithNoFilter(start,end,nbNode);
+    }
 
-    @GetMapping("/test")
-    public List<String> testAlgo(){
-        TouristAttractionEntity start = attractionsRepository.findByName("Maison de Nadar").get();
-        TouristAttractionEntity end = attractionsRepository.findByName("Totem").get();
-
-        return tourismGraphService.findShortestPath(
-                tourismGraphService.generateEdgesForAllAttractions(50),
-                start.getName(),
-                end.getName())
-                .stream().map(string->{
-                    return string + " " + attractionsRepository.findByName(string).get().getCity().getName();
-                }).collect(Collectors.toList());
-
+    @GetMapping("/")
+    public List<TouristAttractionEntity> getPathWithKindFilter(
+            @RequestParam String start,
+            @RequestParam String end,
+            @RequestParam int nbNode,
+            @RequestParam List<String> kinds){
+        return tourismGraphService.pathWithKindFilter(start,end,nbNode,kinds);
     }
 
 

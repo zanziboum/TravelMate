@@ -27,6 +27,7 @@ public class AttractionService {
         }
         return nameList;
     }
+
     public List<double[]> getAttractionsCoordinatesFromCity(String cityName){
         List<double[]> coordinatesList = new ArrayList<>();
         double[] coordinates = new double[2];

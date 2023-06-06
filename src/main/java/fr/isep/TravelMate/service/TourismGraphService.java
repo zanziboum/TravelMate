@@ -1,14 +1,19 @@
 package fr.isep.TravelMate.service;
 
+import fr.isep.TravelMate.Entity.AttractionKindEntity;
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
+import fr.isep.TravelMate.repository.AttractionsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class TourismGraphService {
     private final AttractionService attractionService;
+    private final AttractionsRepository attractionsRepository;
     public static TourismGraphService tourismGraphService;
     private Map<String, List<Edge>> graph = new HashMap<>();
 
@@ -105,6 +110,17 @@ public class TourismGraphService {
         Map<String, double[]> touristAttractions = new HashMap<>();
         List<TouristAttractionEntity> attractions = attractionService.getAllAttraction();
 
+        return getStringListMap(numberOfEdge, result, touristAttractions, attractions);
+    }
+
+    public Map<String, List<Edge>> generateEdgesForAllAttractions(int numberOfEdge, List<String> kindsName) {
+        Map<String, List<Edge>> result = new HashMap<>();
+        Map<String, double[]> touristAttractions = new HashMap<>();
+        List<TouristAttractionEntity> attractions = attractionService.getAttractionsFromKind(kindsName);
+        return getStringListMap(numberOfEdge, result, touristAttractions, attractions);
+    }
+
+    private Map<String, List<Edge>> getStringListMap(int numberOfEdge, Map<String, List<Edge>> result, Map<String, double[]> touristAttractions, List<TouristAttractionEntity> attractions) {
         attractions.forEach(attraction ->{
             String name = attraction.getName();
             double[] coordinates= {
@@ -175,6 +191,26 @@ public class TourismGraphService {
         }
         System.out.println(shortestPath);
         return shortestPath;
+    }
+
+    public List<TouristAttractionEntity> pathWithNoFilter(String start, String end, int nb){
+        return this.findShortestPath(
+                        this.generateEdgesForAllAttractions(nb),
+                        start,
+                        end)
+                .stream().map(name->{
+                    return attractionsRepository.findByName(name).get();
+                }).toList();
+    }
+
+    public List<TouristAttractionEntity> pathWithKindFilter(String start, String end, int nb, List<String> kinds){
+        return this.findShortestPath(
+                        this.generateEdgesForAllAttractions(nb,kinds),
+                        start,
+                        end)
+                .stream().map(name->{
+                    return attractionsRepository.findByName(name).get();
+                }).toList();
     }
 
 }
