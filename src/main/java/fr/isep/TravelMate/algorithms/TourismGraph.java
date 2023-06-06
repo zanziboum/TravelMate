@@ -99,24 +99,22 @@ public class TourismGraph {
     }
 
 
-    public Map<String, List<Edge>> generateEdgesForCity(String city, int numberOfEdge) {
+    public Map<String, List<Edge>> generateEdgesForAllAttractions(int numberOfEdge) {
         Map<String, List<Edge>> result = new HashMap<>();
-        Map<String, double[]> cityAttractions = new HashMap<>();
+        Map<String, double[]> touristAttractions = new HashMap<>();
+        List<TouristAttractionEntity> attractions = attractionService.getAllAttraction();
 
-        // Retrieve attractions and coordinates from attractionService
-        List<String> attractions = attractionService.getAttractionsNamesFromCity(city);
-        List<double[]> coordinates = attractionService.getAttractionsCoordinatesFromCity(city);
+        attractions.forEach(attraction ->{
+            String name = attraction.getName();
+            double[] coordinates= {
+                    attraction.getLon(),
+                    attraction.getLat()};
+            touristAttractions.put(name,coordinates);
+        });
 
-        for (int i = 0; i < attractions.size(); i++) {
-            cityAttractions.put(attractions.get(i), coordinates.get(i));
+        for (String attraction : touristAttractions.keySet()){
+            result.put(attraction, generateAllEdges(attraction, touristAttractions, numberOfEdge));
         }
-        result.put(city, tourismGraph.generateAllEdges(cityAttractions, numberOfEdge));
-        return result;
-    }
-    public Map<String, List<Edge>> edgesForSourceCityAndDestinationCity(String beginningCity, String destinationCity,int numberOfEdges){
-        Map<String, List<Edge>> result = new HashMap<>();
-        result.putAll(generateEdgesForCity(beginningCity,numberOfEdges));
-        result.putAll(generateEdgesForCity(destinationCity,numberOfEdges));
         return result;
     }
 
@@ -177,4 +175,9 @@ public class TourismGraph {
 
         return shortestPath;
     }
+
+    public static void main(String[] args) {
+        
+    }
 }
+
