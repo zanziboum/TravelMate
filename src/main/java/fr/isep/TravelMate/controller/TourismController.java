@@ -2,6 +2,7 @@ package fr.isep.TravelMate.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
+import fr.isep.TravelMate.algorithms.TourismGraph;
 import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.service.AttractionService;
@@ -64,5 +65,9 @@ public class TourismController {
             @RequestParam("kinds") List<String> kinds){
         return attractionService.getAttractionFromCityAndKinds(city,kinds);
     }
+
+
+
+
 
 }

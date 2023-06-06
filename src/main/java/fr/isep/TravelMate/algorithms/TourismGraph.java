@@ -1,10 +1,13 @@
 package fr.isep.TravelMate.algorithms;
 
+import fr.isep.TravelMate.Entity.TouristAttractionEntity;
 import fr.isep.TravelMate.service.AttractionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 @RequiredArgsConstructor
+@Service
 public class TourismGraph {
     private final AttractionService attractionService;
     public static TourismGraph tourismGraph;
@@ -73,26 +76,25 @@ public class TourismGraph {
         return distance;
     }
 
-    public List<Edge> generateAllEdges(Map<String, double[]> attractions, int edgeNumberPerNode) {
+
+    public List<Edge> generateAllEdges(String sourceAttraction, Map<String, double[]> attractions, int edgeNumberPerNode) {
         List<Edge> edgeList = new ArrayList<>();
 
-        for (String attraction1 : attractions.keySet()) {
-            double[] coordinates1 = attractions.get(attraction1);
-            List<String> nearbyAttractions = new ArrayList<>(attractions.keySet());
-            nearbyAttractions.remove(attraction1);
+        double[] sourceCoordinates = attractions.get(sourceAttraction);
+        List<String> nearbyAttractions = new ArrayList<>(attractions.keySet());
+        nearbyAttractions.remove(sourceAttraction);
 
-            int edgesGenerated = 0;
-            while (edgesGenerated < edgeNumberPerNode && !nearbyAttractions.isEmpty()) {
-                int randomIndex = (int) (Math.random() * nearbyAttractions.size());
-                String attraction2 = nearbyAttractions.get(randomIndex);
-                double[] coordinates2 = attractions.get(attraction2);
-                double distance = calculateDistance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
-                Edge edge = new Edge(attraction2, distance);
-                edgeList.add(edge);
+        int edgesGenerated = 0;
+        while (edgesGenerated < edgeNumberPerNode && !nearbyAttractions.isEmpty()) {
+            int randomIndex = (int) (Math.random() * nearbyAttractions.size());
+            String destinationAttraction = nearbyAttractions.get(randomIndex);
+            double[] destinationCoordinates = attractions.get(destinationAttraction);
+            double distance = calculateDistance(sourceCoordinates[0], sourceCoordinates[1], destinationCoordinates[0], destinationCoordinates[1]);
+            Edge edge = new Edge(destinationAttraction, distance);
+            edgeList.add(edge);
 
-                nearbyAttractions.remove(randomIndex);
-                edgesGenerated++;
-            }
+            nearbyAttractions.remove(randomIndex);
+            edgesGenerated++;
         }
 
         return edgeList;
@@ -172,7 +174,7 @@ public class TourismGraph {
             shortestPath.add(0, currentAttraction);
             currentAttraction = previous.get(currentAttraction);
         }
-
+        System.out.println(shortestPath);
         return shortestPath;
     }
 

@@ -46,5 +46,10 @@ public class AttractionService {
         return attractionsRepository.findByCityNameAndKindsNameIn(cityName,kinds);
     }
 
+    public List<TouristAttractionEntity> getAllAttraction(){
+        return attractionsRepository.findAll();
+    }
+
+
 
 }
