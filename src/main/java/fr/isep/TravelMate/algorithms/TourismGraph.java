@@ -113,9 +113,11 @@ public class TourismGraph {
         result.put(city, tourismGraph.generateAllEdges(cityAttractions, numberOfEdge));
         return result;
     }
-    public Map<String, List<Edge>> edgesForSourceCityAndDestinationCity(Map<String, List<Edge>>beginningCity,Map<String, List<Edge>>destinationCity){
-        beginningCity.putAll(destinationCity);
-        return beginningCity;
+    public Map<String, List<Edge>> edgesForSourceCityAndDestinationCity(String beginningCity, String destinationCity,int numberOfEdges){
+        Map<String, List<Edge>> result = new HashMap<>();
+        result.putAll(generateEdgesForCity(beginningCity,numberOfEdges));
+        result.putAll(generateEdgesForCity(destinationCity,numberOfEdges));
+        return result;
     }
 
     public List<String> findShortestPath(Map<String, List<Edge>> graph, String sourceAttraction, String destinationAttraction) {
