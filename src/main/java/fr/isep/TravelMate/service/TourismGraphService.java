@@ -1,16 +1,15 @@
-package fr.isep.TravelMate.algorithms;
+package fr.isep.TravelMate.service;
 
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
-import fr.isep.TravelMate.service.AttractionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 @RequiredArgsConstructor
 @Service
-public class TourismGraph {
+public class TourismGraphService {
     private final AttractionService attractionService;
-    public static TourismGraph tourismGraph;
+    public static TourismGraphService tourismGraphService;
     private Map<String, List<Edge>> graph = new HashMap<>();
 
 
@@ -178,8 +177,5 @@ public class TourismGraph {
         return shortestPath;
     }
 
-    public static void main(String[] args) {
-        
-    }
 }
 

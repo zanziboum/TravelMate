@@ -2,7 +2,7 @@ package fr.isep.TravelMate.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
-import fr.isep.TravelMate.algorithms.TourismGraph;
+import fr.isep.TravelMate.service.TourismGraphService;
 import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.service.AttractionService;
@@ -67,7 +67,22 @@ public class TourismController {
     }
 
 
+    private final TourismGraphService tourismGraphService;
 
+    @GetMapping("/test")
+    public List<String> testAlgo(){
+        TouristAttractionEntity start = attractionsRepository.findByName("Maison de Nadar").get();
+        TouristAttractionEntity end = attractionsRepository.findByName("Totem").get();
+
+        return tourismGraphService.findShortestPath(
+                tourismGraphService.generateEdgesForAllAttractions(50),
+                start.getName(),
+                end.getName())
+                .stream().map(string->{
+                    return string + " " + attractionsRepository.findByName(string).get().getCity().getName();
+                }).collect(Collectors.toList());
+
+    }
 
 
 }
