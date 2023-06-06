@@ -1,68 +1,16 @@
 package fr.isep.TravelMate.algorithms;
 
+import fr.isep.TravelMate.service.AttractionService;
+import lombok.RequiredArgsConstructor;
+
 import java.util.*;
-
+@RequiredArgsConstructor
 public class TourismGraph {
-
+    private final AttractionService attractionService;
+    public static TourismGraph tourismGraph;
     private Map<String, List<Edge>> graph = new HashMap<>();
 
-    public List<String> findShortestPath(Map<String, List<Edge>> graph, String sourceAttraction, String destinationAttraction) {
-        // Create a priority queue to store the vertices and their distances
-        PriorityQueue<Vertex> queue = new PriorityQueue<>();
 
-        // Create a map to store the distances of vertices from the source
-        Map<String, Double> distances = new HashMap<>();
-
-        // Create a map to store the previous vertex in the shortest path
-        Map<String, String> previous = new HashMap<>();
-
-        // Initialize all distances to infinity except the source vertex
-        for (String attraction : graph.keySet()) {
-            if (attraction.equals(sourceAttraction)) {
-                distances.put(attraction, 0.0);
-            } else {
-                distances.put(attraction, Double.POSITIVE_INFINITY);
-            }
-        }
-
-        // Add the source vertex to the priority queue
-        queue.offer(new Vertex(sourceAttraction, 0.0));
-
-        while (!queue.isEmpty()) {
-            Vertex current = queue.poll();
-            String currentAttraction = current.getAttraction();
-            double currentDistance = current.getDistance();
-
-            // If the current distance is greater than the stored distance, skip it
-            if (currentDistance > distances.get(currentAttraction)) {
-                continue;
-            }
-
-            // Explore the neighboring attractions
-            for (Edge edge : graph.get(currentAttraction)) {
-                String neighborAttraction = edge.getDestination();
-                double distanceToNeighbor = edge.getDistance();
-                double totalDistance = currentDistance + distanceToNeighbor;
-
-                // If a shorter path is found, update the distance and previous vertex
-                if (totalDistance < distances.get(neighborAttraction)) {
-                    distances.put(neighborAttraction, totalDistance);
-                    previous.put(neighborAttraction, currentAttraction);
-                    queue.offer(new Vertex(neighborAttraction, totalDistance));
-                }
-            }
-        }
-
-        // Reconstruct the shortest path from source to destination
-        List<String> shortestPath = new ArrayList<>();
-        String currentAttraction = destinationAttraction;
-        while (currentAttraction != null) {
-            shortestPath.add(0, currentAttraction);
-            currentAttraction = previous.get(currentAttraction);
-        }
-
-        return shortestPath;
-    }
 
     private static class Edge {
         private String destination;
@@ -125,7 +73,9 @@ public class TourismGraph {
         return distance;
     }
 
-    public void generateAllEdges(Map<String, double[]> attractions, int edgeNumberPerNode) {
+    public List<Edge> generateAllEdges(Map<String, double[]> attractions, int edgeNumberPerNode) {
+        List<Edge> edgeList = new ArrayList<>();
+
         for (String attraction1 : attractions.keySet()) {
             double[] coordinates1 = attractions.get(attraction1);
             List<String> nearbyAttractions = new ArrayList<>(attractions.keySet());
@@ -138,47 +88,91 @@ public class TourismGraph {
                 double[] coordinates2 = attractions.get(attraction2);
                 double distance = calculateDistance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
                 Edge edge = new Edge(attraction2, distance);
-
-                if (!graph.containsKey(attraction1)) {
-                    graph.put(attraction1, new ArrayList<>());
-                }
-                graph.get(attraction1).add(edge);
+                edgeList.add(edge);
 
                 nearbyAttractions.remove(randomIndex);
                 edgesGenerated++;
             }
         }
+
+        return edgeList;
     }
 
-    public static void main(String[] args) {
-        // Create a new instance of TourismGraph
-        TourismGraph graph = new TourismGraph();
 
-        // Create a HashMap to store attractions and their coordinates
-        Map<String, double[]> attractions = new HashMap<>();
-        attractions.put("Eiffel Tower", new double[]{48.8566, 2.3522});
-        attractions.put("Louvre Museum", new double[]{48.8606, 2.3376});
-        attractions.put("Notre-Dame Cathedral", new double[]{48.8529, 2.3499});
-        attractions.put("Arc de Triomphe", new double[]{48.8738, 2.295});
-        attractions.put("Montmartre", new double[]{48.8867, 2.3431});
-        attractions.put("Palace of Versailles", new double[]{48.8048, 2.1204});
+    public Map<String, List<Edge>> generateEdgesForCity(String city, int numberOfEdge) {
+        Map<String, List<Edge>> result = new HashMap<>();
+        Map<String, double[]> cityAttractions = new HashMap<>();
 
-        // Generate edges between attractions
-        graph.generateAllEdges(attractions,4);
+        // Retrieve attractions and coordinates from attractionService
+        List<String> attractions = attractionService.getAttractionsNamesFromCity(city);
+        List<double[]> coordinates = attractionService.getAttractionsCoordinatesFromCity(city);
 
-        // Find the shortest path between two attractions
-        String sourceAttraction = "Eiffel Tower";
-        String destinationAttraction = "Notre-Dame Cathedral";
-        List<String> shortestPath = graph.findShortestPath(graph.graph, sourceAttraction, destinationAttraction);
+        for (int i = 0; i < attractions.size(); i++) {
+            cityAttractions.put(attractions.get(i), coordinates.get(i));
+        }
+        result.put(city, tourismGraph.generateAllEdges(cityAttractions, numberOfEdge));
+        return result;
+    }
+    public Map<String, List<Edge>> edgesForSourceCityAndDestinationCity(Map<String, List<Edge>>beginningCity,Map<String, List<Edge>>destinationCity){
+        beginningCity.putAll(destinationCity);
+        return beginningCity;
+    }
 
-        // Print the shortest path
-        if (shortestPath.isEmpty()) {
-            System.out.println("No path found between the attractions.");
-        } else {
-            System.out.println("Shortest path:");
-            for (String attraction : shortestPath) {
-                System.out.println(attraction);
+    public List<String> findShortestPath(Map<String, List<Edge>> graph, String sourceAttraction, String destinationAttraction) {
+        // Create a priority queue to store the vertices and their distances
+        PriorityQueue<Vertex> queue = new PriorityQueue<>();
+
+        // Create a map to store the distances of vertices from the source
+        Map<String, Double> distances = new HashMap<>();
+
+        // Create a map to store the previous vertex in the shortest path
+        Map<String, String> previous = new HashMap<>();
+
+        // Initialize all distances to infinity except the source vertex
+        for (String attraction : graph.keySet()) {
+            if (attraction.equals(sourceAttraction)) {
+                distances.put(attraction, 0.0);
+            } else {
+                distances.put(attraction, Double.POSITIVE_INFINITY);
             }
         }
+
+        // Add the source vertex to the priority queue
+        queue.offer(new Vertex(sourceAttraction, 0.0));
+
+        while (!queue.isEmpty()) {
+            Vertex current = queue.poll();
+            String currentAttraction = current.getAttraction();
+            double currentDistance = current.getDistance();
+
+            // If the current distance is greater than the stored distance, skip it
+            if (currentDistance > distances.get(currentAttraction)) {
+                continue;
+            }
+
+            // Explore the neighboring attractions
+            for (Edge edge : graph.get(currentAttraction)) {
+                String neighborAttraction = edge.getDestination();
+                double distanceToNeighbor = edge.getDistance();
+                double totalDistance = currentDistance + distanceToNeighbor;
+
+                // If a shorter path is found, update the distance and previous vertex
+                if (totalDistance < distances.get(neighborAttraction)) {
+                    distances.put(neighborAttraction, totalDistance);
+                    previous.put(neighborAttraction, currentAttraction);
+                    queue.offer(new Vertex(neighborAttraction, totalDistance));
+                }
+            }
+        }
+
+        // Reconstruct the shortest path from source to destination
+        List<String> shortestPath = new ArrayList<>();
+        String currentAttraction = destinationAttraction;
+        while (currentAttraction != null) {
+            shortestPath.add(0, currentAttraction);
+            currentAttraction = previous.get(currentAttraction);
+        }
+
+        return shortestPath;
     }
 }
