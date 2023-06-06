@@ -22,6 +22,7 @@ axios.get(`${apiUrl}/NameCity`)
 axios.get(`${apiUrl}/kindName`)
     .then(response => {
         const typesEvenements = response.data;
+        typesEvenements.sort()
         const filterDropdown = document.getElementById('filter');
 
         fillDropdownOptions(filterDropdown, typesEvenements);
@@ -29,6 +30,19 @@ axios.get(`${apiUrl}/kindName`)
     .catch(error => {
         console.error('Erreur lors de la récupération des types d\'événements:', error);
     });
+
+function getSelectedTypes(){
+    var selectedOptionsDiv = document.getElementById('selected-options');
+    var selectedOptions = selectedOptionsDiv.getElementsByClassName('selected-option');
+    var typesBatiments = [];
+
+    for (var i = 0; i < selectedOptions.length; i++) {
+        var selectedOption = selectedOptions[i];
+        var typeBatiment = selectedOption.childNodes[0].nodeValue.trim();
+        typesBatiments.push(typeBatiment);
+    }
+    return typesBatiments
+}
 
 // Fonction de gestion du changement de la ville de départ
 function handleDepartureAttractionChange(event) {
@@ -40,16 +54,36 @@ function handleDepartureAttractionChange(event) {
 
     // Vérifier si une ville a été sélectionnée et si un filtre est choisi
     if (selectedCity) {
-        // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée avec le filtre choisi
-        axios.get(`${apiUrl}/fromCity`, { params: { city: selectedCity} })
-            .then(response => {
-                const attractions = response.data;
-                fillDropdownOptions(departureAttractionDropdown, attractions);
+        const selectedTypes = getSelectedTypes()
+        if(selectedTypes.length === 0){
+            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée avec le filtre choisi
+            axios.get(`${apiUrl}/fromCity`, {
+                params: {
+                    city: selectedCity}
             })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des attractions :', error);
-            });
-    }
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(departureAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions :', error);
+                });
+        }else{
+
+            let param = new URLSearchParams();
+            param.append("city", selectedCity);
+            selectedTypes.forEach(type => param.append("kinds", type));
+
+            axios.get(`${apiUrl}/fromCityAndKinds`, { params: param })
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(departureAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions :', error);
+                });
+            }
+        }
 }
 // Fonction de gestion du changement de la ville d'arrivee
 function handleArrivalAttractionChange(event) {
@@ -61,17 +95,34 @@ function handleArrivalAttractionChange(event) {
 
     // Vérifier si une ville a été sélectionnée
     if (selectedCity) {
-        // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
-        axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
-            .then(response => {
-                const attractions = response.data;
-                fillDropdownOptions(arrivalAttractionDropdown, attractions);
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des attractions:', error);
-            });
+        const selectedTypes = getSelectedTypes()
+        if(selectedTypes.length === 0){
+            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
+            axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(arrivalAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions:', error);
+                });
+        }else{
+            let param = new URLSearchParams();
+            param.append("city", selectedCity);
+            selectedTypes.forEach(type => param.append("kinds", type));
+
+            axios.get(`${apiUrl}/fromCityAndKinds`, { params: param })
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(arrivalAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions:', error);
+                });
+        }
     }
 }
+
 
 // Fonction utilitaire pour remplir les options d'un dropdown
 function fillDropdownOptions(dropdown, options) {
