@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +36,13 @@ public class TourismController {
     @GetMapping("/NameCity")
     public List<String> getCityNames() {
         return attractionsRepository.getCityNames();
+    }
+
+    @GetMapping("/fromCity")
+    public List<String> getAttractionByCity(@RequestBody String city){
+        return attractionsRepository.findByCityName(city).stream()
+                .map(TouristAttractionEntity::getName)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/fromKind")
