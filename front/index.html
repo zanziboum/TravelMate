@@ -137,22 +137,71 @@
         toggle_menu.classList.toggle('active');
         menu.classList.toggle('responsive')
     }
-        // Récupérer les données des attractions via Axios
-    axios.get('http://localhost:8080/tourism/NameCity')
-        .then(response => {
-        const attractionNames = response.data;
 
-        // Remplir les options du menu déroulant
-        const dropdown = document.getElementById('depart-ville');
-        attractionNames.forEach(name => {
-        const option = document.createElement('option');
-        option.text = name;
-        dropdown.add(option);
-    });
-    })
+    const apiUrl = 'http://localhost:8080/tourism';
+
+    // Récupérer les données des dropdowns depuis l'API
+    axios.get(`${apiUrl}/NameCity`)
+        .then(response => {
+            const cities = response.data;
+            const departureCityDropdown = document.getElementById('depart-ville');
+            const arrivalCityDropdown = document.getElementById('arrivee-ville');
+
+            fillDropdownOptions(departureCityDropdown, cities);
+            fillDropdownOptions(arrivalCityDropdown, cities);
+
+            // Gérer l'événement de changement de la ville de départ
+            departureCityDropdown.addEventListener('change', handleDepartureCityChange);
+        })
         .catch(error => {
-        console.error(error);
-    });
+            console.error('Erreur lors de la récupération des noms de villes:', error);
+        });
+
+    // Fonction de gestion du changement de la ville de départ
+    function handleDepartureCityChange(event) {
+        const selectedCity = event.target.value;
+        const departureAttractionDropdown = document.getElementById('depart-lieu');
+
+        // Réinitialiser les options du dropdown des attractions de départ
+        resetDropdownOptions(departureAttractionDropdown);
+
+        // Vérifier si une ville a été sélectionnée
+        if (selectedCity) {
+            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
+            axios.get(`${apiUrl}/AttractionsByCity/${selectedCity}`)
+                .then(response => {
+                    const attractions = response.data;
+                    fillDropdownOptions(departureAttractionDropdown, attractions);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des attractions:', error);
+                });
+        }
+    }
+
+    // Fonction utilitaire pour remplir les options d'un dropdown
+    function fillDropdownOptions(dropdown, options) {
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.text = option;
+            dropdown.appendChild(optionElement);
+        });
+    }
+
+    // Fonction utilitaire pour réinitialiser les options d'un dropdown
+    function resetDropdownOptions(dropdown) {
+        while (dropdown.firstChild) {
+            dropdown.removeChild(dropdown.firstChild);
+        }
+        const defaultOption = document.createElement('option');
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = 'Sélectionnez une option';
+        dropdown.appendChild(defaultOption);
+    }
+
+
 </script>
 
 </body>
