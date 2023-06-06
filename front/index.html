@@ -8,17 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
-    <!-- Include Twitter Bootstrap and jQuery: -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-
-    <!-- Include the plugin's CSS and JS: -->
-    <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="javascript/reponsive.js"></script>
+    <script src="javascript/dropdown.js"></script>
+    <script src="javascript/result.js"></script>
 
 </head>
 <body>
@@ -59,161 +51,29 @@
                                 <<option value="" disabled selected>Selectionnez le monument de la fin de votre periple</option>
                             </select>
                         </div>
+                        <p>Combien de edge ?</p>
+                        <div class="dropdown-row">
+                            <select id="arrivee-ville" class="dropdown">
+                                <option value="" disabled selected>Selectionnez le nombre</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+
                         <input type="submit" value="voir" class="submit">
                     </div>
                 </form>
     </div>
+    <div id="result" class="result" style="width: 100%">Hello</div>
 </section>
-
-
-<script>
-    var toggle_menu = document.querySelector('.responsive-menu');
-    var menu = document.querySelector('.menu');
-    toggle_menu.onclick= function(){
-        toggle_menu.classList.toggle('active');
-        menu.classList.toggle('responsive')
-    }
-
-    const apiUrl = 'http://localhost:8080/tourism';
-
-    // Récupérer les données des dropdowns depuis l'API
-    axios.get(`${apiUrl}/NameCity`)
-        .then(response => {
-            const cities = response.data;
-            const departureCityDropdown = document.getElementById('depart-ville');
-            const arrivalCityDropdown = document.getElementById('arrivee-ville');
-
-            fillDropdownOptions(departureCityDropdown, cities);
-            fillDropdownOptions(arrivalCityDropdown, cities);
-
-            // Gérer les événements
-            departureCityDropdown.addEventListener('change', handleDepartureCityChange);
-            arrivalCityDropdown.addEventListener('change',handleArrivalCityChange);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la récupération des noms de villes:', error);
-        });
-
-    // Fonction de gestion du changement de la ville de départ
-    function handleDepartureCityChange(event) {
-        const selectedCity = event.target.value;
-        const departureAttractionDropdown = document.getElementById('depart-lieu');
-
-        // Réinitialiser les options du dropdown des attractions
-        resetDropdownOptions(departureAttractionDropdown);
-
-        // Vérifier si une ville a été sélectionnée
-        if (selectedCity) {
-            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
-            axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
-                .then(response => {
-                    const attractions = response.data;
-                    fillDropdownOptions(departureAttractionDropdown, attractions);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération des attractions:', error);
-                });
-        }
-    }
-    // Fonction de gestion du changement de la ville d'arrivee
-    function handleArrivalCityChange(event) {
-        const selectedCity = event.target.value;
-        const arrivalAttractionDropdown = document.getElementById('arrivee-lieu');
-
-        // Réinitialiser les options du dropdown des attractions
-        resetDropdownOptions(arrivalAttractionDropdown);
-
-        // Vérifier si une ville a été sélectionnée
-        if (selectedCity) {
-            // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
-            axios.get(`${apiUrl}/fromCity`, {params:{city:selectedCity}})
-                .then(response => {
-                    const attractions = response.data;
-                    fillDropdownOptions(arrivalAttractionDropdown, attractions);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération des attractions:', error);
-                });
-        }
-    }
-
-    // Fonction utilitaire pour remplir les options d'un dropdown
-    function fillDropdownOptions(dropdown, options) {
-        options.forEach(option => {
-            const optionElement = document.createElement('option');
-            optionElement.value = option;
-            optionElement.text = option;
-            dropdown.appendChild(optionElement);
-        });
-    }
-
-    // Fonction utilitaire pour réinitialiser les options d'un dropdown
-    function resetDropdownOptions(dropdown) {
-        while (dropdown.firstChild) {
-            dropdown.removeChild(dropdown.firstChild);
-        }
-        const defaultOption = document.createElement('option');
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        defaultOption.textContent = 'Sélectionnez une option';
-        dropdown.appendChild(defaultOption);
-    }
-
-    // Récupérer les données des types d'événements depuis l'API
-    axios.get(`${apiUrl}/kindName`)
-        .then(response => {
-            const typesEvenements = response.data;
-            const filterDropdown = document.getElementById('filter');
-
-            fillDropdownOptions2(filterDropdown, typesEvenements);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la récupération des types d\'événements:', error);
-        });
-
-    // Fonction utilitaire pour remplir les options d'un dropdown
-    function fillDropdownOptions2(dropdown, options) {
-        options.forEach(option => {
-            const optionElement = document.createElement('option');
-            optionElement.value = option;
-            optionElement.text = option;
-            dropdown.appendChild(optionElement);
-        });
-    }
-    $(function() {
-        $("#filter").change(function() {
-            var selectedOption = $(this).children("option:selected");
-            var selectedOptionText = selectedOption.text();
-            if (selectedOptionText) {
-                // Créer un nouvel élément div pour l'option sélectionnée
-                var optionDiv = $('<div class="selected-option">' + selectedOptionText + '<button class="remove-option">x</button></div>');
-
-                // Ajouter un gestionnaire de clics au bouton de suppression de l'option
-                optionDiv.find('.remove-option').click(function() {
-                    optionDiv.remove();
-                    // Réactiver l'option dans le menu déroulant lorsqu'elle est supprimée
-                    selectedOption.prop("disabled", false);
-                });
-
-                // Ajouter l'option à la boîte de sélection
-                $("#selected-options").append(optionDiv);
-
-                // Désactiver l'option dans le menu déroulant
-                selectedOption.prop("disabled", true);
-
-                // Réinitialiser la sélection du menu déroulant à la première option
-                $(this).prop('selectedIndex', 0);
-            }
-        });
-    });
-
-
-</script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#filter').multiselect();
-    });
-</script>
 
 </body>
 </html>
