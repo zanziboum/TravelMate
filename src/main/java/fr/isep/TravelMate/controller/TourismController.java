@@ -2,9 +2,10 @@ package fr.isep.TravelMate.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
-import fr.isep.TravelMate.algorithms.TourismAttraction;
 import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.AttractionsRepository;
+import fr.isep.TravelMate.service.AttractionService;
+import fr.isep.TravelMate.service.KindService;
 import fr.isep.TravelMate.service.TourismService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/tourism")
 public class TourismController {
     private final TourismService tourismService;
+    private final AttractionService attractionService;
+    private final KindService kindService;
     private final AttractionsRepository attractionsRepository;
 
     @PostMapping("/closest-attractions")
@@ -39,15 +42,20 @@ public class TourismController {
     }
 
     @GetMapping("/fromCity")
-    public List<String> getAttractionByCity(@RequestBody String city){
-        return attractionsRepository.findByCityName(city).stream()
+    public List<String> getAttractionByCity(@RequestParam  String city){
+        return attractionService.getAttractionsFromCity(city).stream()
                 .map(TouristAttractionEntity::getName)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/fromKind")
     public List<TouristAttractionEntity> getAttractionsByKind(@RequestBody String kind) {
-        return attractionsRepository.findByKindsName(kind);
+        return attractionService.getAttractionsFromKind(kind);
+    }
+
+    @GetMapping("/kindName")
+    public List<String> getKindName(){
+        return kindService.getKindEntityName();
     }
 
 }

@@ -168,7 +168,10 @@
         // Vérifier si une ville a été sélectionnée
         if (selectedCity) {
             // Effectuer une requête AJAX pour récupérer les attractions de la ville sélectionnée
-            axios.get(`${apiUrl}/AttractionsByCity/${selectedCity}`)
+            axios.get(`${apiUrl}/fromCity`, {params:{
+                    city:selectedCity
+                }
+            })
                 .then(response => {
                     const attractions = response.data;
                     fillDropdownOptions(departureAttractionDropdown, attractions);

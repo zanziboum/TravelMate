@@ -1,7 +1,6 @@
 package fr.isep.TravelMate.repository;
 
 import fr.isep.TravelMate.Entity.TouristAttractionEntity;
-import fr.isep.TravelMate.algorithms.TourismAttraction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
