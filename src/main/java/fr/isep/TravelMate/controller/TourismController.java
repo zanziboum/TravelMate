@@ -85,5 +85,4 @@ public class TourismController {
         return tourismGraphService.pathWithKindFilter(start,end,nbNode,kinds);
     }
 
-
 }
