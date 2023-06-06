@@ -49,13 +49,20 @@ public class TourismController {
     }
 
     @GetMapping("/fromKind")
-    public List<TouristAttractionEntity> getAttractionsByKind(@RequestBody String kind) {
-        return attractionService.getAttractionsFromKind(kind);
+    public List<TouristAttractionEntity> getAttractionsByKind(@RequestParam List<String> kinds) {
+        return attractionService.getAttractionsFromKind(kinds);
     }
 
     @GetMapping("/kindName")
     public List<String> getKindName(){
         return kindService.getKindEntityName();
+    }
+
+    @GetMapping("/fromCityAndKinds")
+    public List<TouristAttractionEntity> getAttractionByCityAndKind(
+            @RequestParam("city") String city,
+            @RequestParam("kinds") List<String> kinds){
+        return attractionService.getAttractionFromCityAndKinds(city,kinds);
     }
 
 }

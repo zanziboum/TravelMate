@@ -38,8 +38,12 @@ public class AttractionService {
         return coordinatesList;
     }
 
-    public List<TouristAttractionEntity> getAttractionsFromKind(String kindName){
-        return attractionsRepository.findByKindsName(kindName);
+    public List<TouristAttractionEntity> getAttractionsFromKind(List<String> kindName){
+        return attractionsRepository.findByKindsNameIn(kindName);
+    }
+
+    public List<TouristAttractionEntity> getAttractionFromCityAndKinds(String cityName, List<String> kinds){
+        return attractionsRepository.findByCityNameAndKindsNameIn(cityName,kinds);
     }
 
 
