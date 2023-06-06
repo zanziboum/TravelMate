@@ -1,28 +1,27 @@
-// Sélectionner le formulaire
-const form = document.querySelector('form');
+// Sélectionnez le formulaire
+const form = document.getElementById('myForm');
 
-// Écouter l'événement de soumission du formulaire
+// Écoutez l'événement de soumission du formulaire
 form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Empêcher la soumission du formulaire
+    event.preventDefault(); // Empêche le formulaire de se soumettre normalement
 
-    // Récupérer les valeurs sélectionnées dans les dropdowns
-    const selectedDepartureCity = document.getElementById('depart-ville').value;
-    const selectedDepartureAttraction = document.getElementById('depart-lieu').value;
-    const selectedArrivalCity = document.getElementById('arrivee-ville').value;
-    const selectedArrivalAttraction = document.getElementById('arrivee-lieu').value;
+    // Récupérez les valeurs des champs du formulaire
+    const selectedOptions = document.getElementById('selected-options').innerHTML;
+    const departVille = document.getElementById('depart-ville').value;
+    const departLieu = document.getElementById('depart-lieu').value;
+    const arriveeVille = document.getElementById('arrivee-ville').value;
+    const arriveeLieu = document.getElementById('arrivee-lieu').value;
+    const sliderValue = document.getElementById('sliderValue').innerHTML;
 
-    // Vérifier si toutes les valeurs sont sélectionnées
-    if (
-        selectedDepartureCity &&
-        selectedDepartureAttraction &&
-        selectedArrivalCity &&
-        selectedArrivalAttraction
-    ) {
-        // Construire le message de résultat
-        const resultMessage = `Vous avez sélectionné le départ de ${selectedDepartureAttraction} à ${selectedDepartureCity}, et l'arrivée à ${selectedArrivalAttraction} à ${selectedArrivalCity}.`;
+    // Affichez les valeurs dans la div des résultats
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `
+            <p>Options sélectionnées: ${selectedOptions}</p>
+            <p>Départ: ${departVille}, ${departLieu}</p>
+            <p>Arrivée: ${arriveeVille}, ${arriveeLieu}</p>
+            <p>Valeur du slider: ${sliderValue}</p>
+        `;
 
-        // Afficher le résultat dans la div "result"
-        const resultDiv = document.getElementById('result');
-        resultDiv.textContent = resultMessage;
-    }
+    // Réinitialisez le formulaire (facultatif)
+    form.reset();
 });

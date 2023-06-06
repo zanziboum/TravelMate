@@ -8,11 +8,8 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
 </head>
 <body>
-
 <header>
     <div class="logo">
         <a href="index.html"> <span>Tourist</span> Link</a>
@@ -22,7 +19,7 @@
 <section id="home">
     <div class="find_trip">
         <h2>Le tourisme en France</h2>
-                <form>
+                <form id="myForm">
                     <div class="form-container">
                         <p>Quel type de batiment voulez-vous vister ?</p>
                         <div id="selected-options" class="filter-div"></div>
@@ -51,26 +48,14 @@
                         </div>
                         <p>Combien de edge ?</p>
                         <div class="dropdown-row">
-                            <select id="arrivee-ville" class="dropdown">
-                                <option value="" disabled selected>Selectionnez le nombre</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
+                            <input type="range" min="3" max="100" value="3" class="slider" id="mySlider">
+                            <p>Valeur sélectionnée: <span id="sliderValue">3</span></p>
                         </div>
-
                         <input type="submit" value="voir" class="submit">
                     </div>
                 </form>
     </div>
-    <div id="result" class="result" style="width: 100%">Hello</div>
+    <div id="results" class="result">Hello</div>
 </section>
 
 
