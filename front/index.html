@@ -8,8 +8,17 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <!-- Include Twitter Bootstrap and jQuery: -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!-- Include the plugin's CSS and JS: -->
+    <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 </head>
 <body>
@@ -28,9 +37,8 @@
                         <p>Quel type de batiment voulez-vous vister ?</p>
                         <div id="selected-options" class="filter-div"></div>
                         <div class="dropdown-row-1">
-                            <select id="filter" class="filter" multiple="multiple">
+                            <select id="filter" class="filter">
                                 <option value="" disabled selected>Selectionnez un filtre</option>
-                                <option>test</option>
                             </select>
                         </div>
                         <p>D'ou partez-vous ?</p>
@@ -173,28 +181,37 @@
         });
     }
     $(function() {
-        $("#filter").selectmenu({
-            multiple: true,
-            close: function(event, ui) {
-                var selectedOptions = $(this).val();
-                var selectedOptionsText = '';
+        $("#filter").change(function() {
+            var selectedOption = $(this).children("option:selected");
+            var selectedOptionText = selectedOption.text();
+            if (selectedOptionText) {
+                // Créer un nouvel élément div pour l'option sélectionnée
+                var optionDiv = $('<div class="selected-option">' + selectedOptionText + '<button class="remove-option">x</button></div>');
 
-                // Construire le texte des options sélectionnées
-                selectedOptions.forEach(function(option) {
-                    selectedOptionsText += option + ', ';
+                // Ajouter un gestionnaire de clics au bouton de suppression de l'option
+                optionDiv.find('.remove-option').click(function() {
+                    optionDiv.remove();
+                    // Réactiver l'option dans le menu déroulant lorsqu'elle est supprimée
+                    selectedOption.prop("disabled", false);
                 });
 
-                // Supprimer la virgule finale
-                selectedOptionsText = selectedOptionsText.slice(0, -2);
+                // Ajouter l'option à la boîte de sélection
+                $("#selected-options").append(optionDiv);
 
-                // Afficher le texte des options sélectionnées dans l'élément ajouté
-                $("#selected-options").text(selectedOptionsText);
+                // Désactiver l'option dans le menu déroulant
+                selectedOption.prop("disabled", true);
+
+                // Réinitialiser la sélection du menu déroulant à la première option
+                $(this).prop('selectedIndex', 0);
             }
         });
     });
 
-
-
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#filter').multiselect();
+    });
 </script>
 
 </body>
