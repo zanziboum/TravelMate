@@ -68,7 +68,7 @@ public class TourismController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/PathNoFilter")
     public List<TouristAttractionEntity> getPathWithNoFilter(
             @RequestParam String start,
             @RequestParam String end,
@@ -76,7 +76,7 @@ public class TourismController {
         return tourismGraphService.pathWithNoFilter(start,end,nbNode);
     }
 
-    @GetMapping("/")
+    @GetMapping("/PathKindFilter")
     public List<TouristAttractionEntity> getPathWithKindFilter(
             @RequestParam String start,
             @RequestParam String end,
