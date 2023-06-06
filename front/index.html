@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
 </head>
 <body>
 
@@ -22,6 +24,12 @@
         <h2>Le tourisme en France</h2>
                 <form>
                     <div class="form-container">
+                        <p>Quel type de batiment voulez-vous vister ?</p>
+                        <div class="dropdown-row-1">
+                            <select name="filter" id="filter" class="filter" multiple>
+                                <option value="" disabled selected>Selectionnez un filtre</option>
+                            </select>
+                        </div>
                         <p>D'ou partez-vous ?</p>
                         <div class="dropdown-row">
                             <select id="depart-ville" class="dropdown" >
@@ -150,7 +158,7 @@
             fillDropdownOptions(departureCityDropdown, cities);
             fillDropdownOptions(arrivalCityDropdown, cities);
 
-            // Gérer l'événement de changement de la ville de départ
+            // Gérer les événements
             departureCityDropdown.addEventListener('change', handleDepartureCityChange);
             arrivalCityDropdown.addEventListener('change',handleArrivalCityChange);
         })
@@ -179,7 +187,7 @@
                 });
         }
     }
-
+    // Fonction de gestion du changement de la ville d'arrivee
     function handleArrivalCityChange(event) {
         const selectedCity = event.target.value;
         const arrivalAttractionDropdown = document.getElementById('arrivee-lieu');
@@ -222,6 +230,30 @@
         defaultOption.textContent = 'Sélectionnez une option';
         dropdown.appendChild(defaultOption);
     }
+    new MultiSelectTag('filter')  // id
+
+    // Récupérer les données des types d'événements depuis l'API
+    axios.get(`${apiUrl}/kindName`)
+        .then(response => {
+            const typesEvenements = response.data;
+            const filterDropdown = document.getElementById('filter');
+
+            fillDropdownOptions(filterDropdown, typesEvenements);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des types d\'événements:', error);
+        });
+
+    // Fonction utilitaire pour remplir les options d'un dropdown
+    function fillDropdownOptions(dropdown, options) {
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.text = option;
+            dropdown.appendChild(optionElement);
+        });
+    }
+
 
 </script>
 
