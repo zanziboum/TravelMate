@@ -1,6 +1,5 @@
 function populateDropdownOptions(url, selectElementId) {
 var selectElement = document.getElementById(selectElementId);
-
 // Make an Axios GET request to fetch the data from the Spring backend
 axios.get(url)
 .then(function (response) {
@@ -18,7 +17,6 @@ selectElement.appendChild(optionElement);
 console.error('Request failed:', error);
 });
 }
-
 // Call the function to populate the dropdown options
 populateDropdownOptions('/api/cities', 'depart-ville');
 populateDropdownOptions('/api/monuments', 'depart-lieu');

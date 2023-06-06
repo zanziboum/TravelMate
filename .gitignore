@@ -34,3 +34,4 @@ build/
 
 ### Nodejs ###
 front/node_modules
+src/resources/application.properties/
