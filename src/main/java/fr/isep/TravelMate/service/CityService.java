@@ -4,7 +4,6 @@ import fr.isep.TravelMate.Entity.CityEntity;
 import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.CityRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

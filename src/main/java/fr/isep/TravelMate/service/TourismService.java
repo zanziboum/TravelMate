@@ -5,6 +5,7 @@ import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.repository.CityRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

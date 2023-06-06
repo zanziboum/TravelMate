@@ -1,5 +1,6 @@
 package fr.isep.TravelMate.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class TouristAttractionEntity {
     private CityEntity city;
 
     @ManyToMany
+
     private Set<AttractionKindEntity> kinds;
 
     public TouristAttractionEntity(String name, double lon, double lat, int score, CityEntity city, Set<AttractionKindEntity> kinds) {

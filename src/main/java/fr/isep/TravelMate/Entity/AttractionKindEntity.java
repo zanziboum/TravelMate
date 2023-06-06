@@ -2,6 +2,7 @@ package fr.isep.TravelMate.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data

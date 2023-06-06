@@ -8,12 +8,10 @@ import fr.isep.TravelMate.model.City;
 import fr.isep.TravelMate.repository.AttractionKindRepository;
 import fr.isep.TravelMate.repository.AttractionsRepository;
 import fr.isep.TravelMate.repository.CityRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
- import org.springframework.http.ResponseEntity;
- import org.springframework.stereotype.Service;
- import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
 import java.util.Locale;

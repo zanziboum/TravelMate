@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AttractionsRepository extends JpaRepository<TouristAttractionEntity,Long> {
     Optional<TouristAttractionEntity> findByName(String name);
+    List<TouristAttractionEntity> findByKindsName(String kindName);
     @Query("SELECT a.name FROM TouristAttractionEntity a")
     List<String> getAllAttractionNames();
     @Query("SELECT a.name FROM CityEntity a")
