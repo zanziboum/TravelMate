@@ -35,6 +35,16 @@ public class TourismController {
         Optional<JsonNode> dest = tourismService.findClosestAttraction(city);
         return dest.orElse(null);
     }
+    @GetMapping("/NameAttractions")
+    public List<String> getAttractionNames() {
+        List<String> attractionNames = attractionsRepository.getAllAttractionNames();
+        return attractionNames;
+    }
+    @GetMapping("/NameCity")
+    public List<String> getCityNames() {
+        List<String> cityNames = attractionsRepository.getCityNames();
+        return cityNames;
+    }
 
 
 

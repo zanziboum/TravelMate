@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tourist Link</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 
@@ -43,88 +45,90 @@
                 </form>
     </div>
 </section>
-<section id="popular-destination">
-    <div class="content">
-        <!-- box -->
-        <div class="box">
-            <img src="images/paris.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Paris</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-        <!-- box -->
-        <div class="box">
-            <img src="images/moscou.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Moscou</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-        <!-- box -->
-        <div class="box">
-            <img src="images/miami.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Miami</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-        <!-- box -->
-        <div class="box">
-            <img src="images/los-angeles.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Los-Angeles</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-        <!-- box -->
-        <div class="box">
-            <img src="images/rome.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Rome</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-        <!-- box -->
-        <div class="box">
-            <img src="images/tokio.jpg" alt="">
-            <div class="content">
-                <div>
-                    <h4>Tokio</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p>Ea iusto ipsa repudiandae amet conseq.</p>
-                    <a href="#">Lire Plus</a>
-                </div>
-            </div>
-        </div>
-        <!-- box -->
-    </div>
-</section>
+
+
+<!--<section id="popular-destination">-->
+<!--    <div class="content">-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/paris.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Paris</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/moscou.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Moscou</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/miami.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Miami</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/los-angeles.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Los-Angeles</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/rome.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Rome</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--        <div class="box">-->
+<!--            <img src="images/tokio.jpg" alt="">-->
+<!--            <div class="content">-->
+<!--                <div>-->
+<!--                    <h4>Tokio</h4>-->
+<!--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>-->
+<!--                    <p>Ea iusto ipsa repudiandae amet conseq.</p>-->
+<!--                    <a href="#">Lire Plus</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; box &ndash;&gt;-->
+<!--    </div>-->
+<!--</section>-->
 
 <script>
     var toggle_menu = document.querySelector('.responsive-menu');
@@ -133,8 +137,23 @@
         toggle_menu.classList.toggle('active');
         menu.classList.toggle('responsive')
     }
-</script>
+        // Récupérer les données des attractions via Axios
+    axios.get('http://localhost:8080/tourism/NameCity')
+        .then(response => {
+        const attractionNames = response.data;
 
+        // Remplir les options du menu déroulant
+        const dropdown = document.getElementById('depart-ville');
+        attractionNames.forEach(name => {
+        const option = document.createElement('option');
+        option.text = name;
+        dropdown.add(option);
+    });
+    })
+        .catch(error => {
+        console.error(error);
+    });
+</script>
 
 </body>
 </html>
